@@ -1,3 +1,10 @@
+#
+
+
+
+
+
+
 from airflow import DAG
 from airflow.operators import SimpleHttpOperator, HttpSensor, BashOperator, PythonOperator
 from datetime import datetime, timedelta
@@ -61,11 +68,10 @@ FilterTweetsWhoUsedFord = BashOperator(
 	dag=dag)
 
 
-filterTweets.set_downstream(filterUser)
 
+filterTweets.set_downstream(filterUser)
 filterUser.set_downstream(Sort_Unique_UIDs)
 filterUser.set_downstream(Sort_Original_Data)
-
 Sort_Unique_UIDs.set_downstream(FilterTweetsWhoUsedFord)
 Sort_Original_Data.set_downstream(FilterTweetsWhoUsedFord)
 

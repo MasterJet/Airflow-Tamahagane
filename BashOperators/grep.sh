@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Positional arguments:
-# inputFile, Search, -word-regexp 0/1, --ignore-case  0/1, --invert-match 0/1, --max-count=NUM -1/any positive number,OutPutFile
+# inputFile, Search, multiple 0/1, completeWord 0/1, ignore-case  0/1, invert-match 0/1, max-count=NUM -1/any positive number,OutPutFile
 # 
 
 
@@ -12,7 +12,7 @@
 
 # -o, --only-matching       show only the part of a line matching PATTERN
 
-if [ "$#" -lt 7 ]; then
+if [ "$#" -lt 8 ]; then
     echo "*** Too Few Parameters" 
     echo "*** Required Parameters are"     
     echo "*** inputFile, Search, -word-regexp 0/1, --ignore-case  0/1, --invert-match 0/1, --max-count=NUM -1/any positive number,OutPutFile"
@@ -20,14 +20,18 @@ if [ "$#" -lt 7 ]; then
 else
     inputFile=$1
     Search=$2
-    completeWord=$3
-    ignoreCase=$4
-    reverseSearch=$5
-    rowLimit=$6
+    multiple=$3
+    completeWord=$4
+    ignoreCase=$5
+    reverseSearch=$6
+    rowLimit=$7
 
-    outPutFile=$7
+    outPutFile=$8
 
     switches=""
+    if [ "$multiple" == 1 ]; then
+        switches="$switches -E "    
+    fi  
     if [ "$completeWord" == 1 ]; then
     	switches="$switches -w "	
     fi	

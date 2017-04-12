@@ -1,3 +1,2 @@
 # Airflow-Tamahagane
-ETL scheduling tool built on top of Airflow
-local commit
+ETL scheduling utility built on top of Airflow

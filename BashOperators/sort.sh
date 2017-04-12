@@ -2,8 +2,7 @@
 
 # Positional arguments:
 # inputFile, FiledSep, ColuNumberToSort, Order, Unique, outPutFile
-# Order 'd' Descending, 'R' Random and any other value will sort in Ascending order
-# Unique if 1, will filter unique values 
+# is also work for + and - values
 
 if [ "$#" -lt 6 ]; then
     echo "*** Too Few Parameters" 
@@ -23,6 +22,7 @@ else
 
     if [ $unique == 1 ]; then
         cmdUnique=" --unique "
+        ColuNumberToSort=$ColuNumberToSort,1
     fi    
 
     if [ "$FiledSep" == " " ]; then
