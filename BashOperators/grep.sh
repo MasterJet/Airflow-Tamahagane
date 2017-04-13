@@ -15,7 +15,7 @@
 if [ "$#" -lt 8 ]; then
     echo "*** Too Few Parameters" 
     echo "*** Required Parameters are"     
-    echo "*** inputFile, Search, -word-regexp 0/1, --ignore-case  0/1, --invert-match 0/1, --max-count=NUM -1/any positive number,OutPutFile"
+    echo "*** inputFile, Search, multiple 0/1, completeWord 0/1, ignore-case  0/1, invert-match 0/1, max-count=NUM -1/any positive number,OutPutFile"
     exit 1
 else
     inputFile=$1
