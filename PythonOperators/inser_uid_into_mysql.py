@@ -1,19 +1,27 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+#
+# According to:
+# https://www.python.org/dev/peps/pep-0263/
+#
+
 import MySQLdb
 import sys
 import csv
 
 if len(sys.argv) < 1:
-	print "Required argument missing";
-	exit(1) 
-db = MySQLdb.connect("localhost","etl_jobs","etl_jobs","etl_jobs" );
-cursor = db.cursor();
+    print("Required argument missing")
+    exit(1)
 
-fh = open(sys.argv[1], 'rb');
-reader = csv.reader(fh);
+db = MySQLdb.connect("localhost", "etl_jobs", "etl_jobs", "etl_jobs")
+cursor = db.cursor()
+
+fh = open(sys.argv[1], 'rb')
+reader = csv.reader(fh)
 
 for row in reader:
-	uid = row[0].strip();
-	cursor.execute("insert into topUsers (screen_name) values ('%s') " % (uid));
+    uid = row[0].strip()
+    cursor.execute("insert into topUsers (screen_name) values ('%s') " % uid)
 
-db.commit();
-fh.close();
+db.commit()
+fh.close()
