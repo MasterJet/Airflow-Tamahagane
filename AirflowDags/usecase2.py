@@ -34,7 +34,8 @@ dag = DAG(
     default_args=default_args,
     schedule_interval="@once")
 
-cmdGetTermsFromSql = "python {} {}" . format(os.path.join(supporting_scripts, 'getTerms.py'), os.path.join(tempDir, 'searchTerms'))
+cmdGetTermsFromSql = "python {} {}" .\
+                            format(os.path.join(supporting_scripts, 'getTerms.py'), os.path.join(tempDir, 'searchTerms'))
 getTerms = BashOperator(
     task_id='get.Terms',
     bash_command=cmdGetTermsFromSql,
@@ -46,20 +47,22 @@ DownloadFromS3 = BashOperator(
     bash_command=cmdDownloadFromS3,
     dag=dag)
 
-cmdExtract = "bash {} {} e gzip {}" . format(os.path.join(bashOperators, 'compression.sh'), os.path.join(tempDir, 'carsData.tar.gz'), tempDir)
+cmdExtract = "bash {} {} e gzip {}" .\
+                            format(os.path.join(bashOperators, 'compression.sh'), os.path.join(tempDir, 'carsData.tar.gz'), tempDir)
 Extract = BashOperator(
     task_id='Extract',
     bash_command=cmdExtract,
     dag=dag)
 
 cmdFilterTweet = "bash  {} {} {} {}" .\
-format(os.path.join(bashOperators, 'filterTweetsWithTerms.sh'), os.path.join(tempDir, 'carsData.csv'),  os.path.join(tempDir, 'searchTerms'),  os.path.join(tempDir, 'filteredTweets'),)
+                            format(os.path.join(bashOperators, 'filterTweetsWithTerms.sh'), os.path.join(tempDir, 'carsData.csv'),  os.path.join(tempDir, 'searchTerms'),  os.path.join(tempDir, 'filteredTweets'),)
 FilterTweets = BashOperator(
     task_id='Filter.Tweets',
     bash_command=cmdFilterTweet,
     dag=dag)
 
-cmdSample = "bash {} {} 10 {}" . format(os.path.join(bashOperators, 'sample.sh '), os.path.join(tempDir, 'filteredTweets'), os.path.join(tempDir, 'sampleTweets'))  
+cmdSample = "bash {} {} 10 {}" .\
+                            format(os.path.join(bashOperators, 'sample.sh '), os.path.join(tempDir, 'filteredTweets'), os.path.join(tempDir, 'sampleTweets'))  
 tackSample = BashOperator(
     task_id='Extract.Sample',
     bash_command=cmdSample,
@@ -71,25 +74,29 @@ Sample2Gsheet = BashOperator(
     bash_command=cmdSample2Gsheet,
     dag=dag)
 
-cmdUniqueUsers = "bash {} {} , 1 d 1 {}" . format(os.path.join(bashOperators, 'sort.sh'), os.path.join(tempDir, 'filteredTweets'), os.path.join(tempDir, 'uniqueUsers'))
+cmdUniqueUsers = "bash {} {} , 1 d 1 {}" .\
+                            format(os.path.join(bashOperators, 'sort.sh'), os.path.join(tempDir, 'filteredTweets'), os.path.join(tempDir, 'uniqueUsers'))
 UniqueUsers = BashOperator(
     task_id='Unique.Users',
     bash_command=cmdUniqueUsers,
     dag=dag)
 
-cmdSortOnFollowers = "bash {} {} , 2 d 0 {}" . format(os.path.join(bashOperators, 'sort.sh'), os.path.join(tempDir, 'uniqueUsers'), os.path.join(tempDir, 'tweets_sorted'))
+cmdSortOnFollowers = "bash {} {} , 2 d 0 {}" .\
+                            format(os.path.join(bashOperators, 'sort.sh'), os.path.join(tempDir, 'uniqueUsers'), os.path.join(tempDir, 'tweets_sorted'))
 SortOnFollowers = BashOperator(
     task_id='Sort.On.Followers',
     bash_command=cmdSortOnFollowers,
     dag=dag)
 
-cmdHead100 = "bash {} {} 100 {}" . format(os.path.join(bashOperators, 'head.sh'), os.path.join(tempDir, 'tweets_sorted'), os.path.join(tempDir, 'top100'))
+cmdHead100 = "bash {} {} 100 {}" .\
+                            format(os.path.join(bashOperators, 'head.sh'), os.path.join(tempDir, 'tweets_sorted'), os.path.join(tempDir, 'top100'))
 Head100 = BashOperator(
     task_id='Head.100',
     bash_command=cmdHead100,
     dag=dag)
 
-cmdInsertIntoDB = "python " . format(os.path.join(supporting_scripts, 'inser_uid_into_mysql.py'), os.path.join(tempDir, 'top100')) 
+cmdInsertIntoDB = "python " .\
+                            format(os.path.join(supporting_scripts, 'inser_uid_into_mysql.py'), os.path.join(tempDir, 'top100')) 
 insertIntoDB = BashOperator(
     task_id='Insert.Into.DB',
     bash_command=cmdInsertIntoDB,

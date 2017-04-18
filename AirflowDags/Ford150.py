@@ -34,7 +34,8 @@ dag = DAG(
     schedule_interval="@once"
 )
 
-cmdFilterTweets = "bash {}  {} 'ford f-150' 1 1 0 -1 {}" . format(os.path.join(bashOperators, 'grep.sh'), inputfile, os.path.join(tempDir, 'tweetsWithFord'))
+cmdFilterTweets = "bash {}  {} 'ford f-150' 1 1 0 -1 {}" .\
+                        format(os.path.join(bashOperators, 'grep.sh'), inputfile, os.path.join(tempDir, 'tweetsWithFord'))
 
 filterTweets = BashOperator(
     task_id='grep',
@@ -43,7 +44,7 @@ filterTweets = BashOperator(
 )
 
 cmdFilterUser = "bash {} {} , 4 0 {}".\
-					format(os.path.join(bashOperators, 'cut.sh'), os.path.join(tempDir, 'tweetsWithFord' ), os.path.join(tempDir, 'usersWithFord'))
+                        format(os.path.join(bashOperators, 'cut.sh'), os.path.join(tempDir, 'tweetsWithFord' ), os.path.join(tempDir, 'usersWithFord'))
 
 filterUser = BashOperator(
     task_id='Cut',
