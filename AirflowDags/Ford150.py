@@ -34,12 +34,7 @@ dag = DAG(
     schedule_interval="@once"
 )
 
-"""
-Commands like below better to rewrite like example with substitution for better readablity
-cmdFilterTweets = 'bash ' + bashOperators + 'grep.sh  ' + inputfile + ' \'ford f-150\' 1 1 0 -1 ' + wdr + 'usecase1/temp/tweetsWithFord'
-"""
-cmdFilterTweets = "bash {} grep.sh {} 'ford f-150' 1 1 0 -1 {}".\
-                      format(bashOperators, inputfile, os.path.join(tempDir, 'tweetsWithFord'))
+cmdFilterTweets = "bash {}  {} 'ford f-150' 1 1 0 -1 {}" . format(os.path.join(bashOperators, 'grep.sh'), inputfile, os.path.join(tempDir, 'tweetsWithFord'))
 
 filterTweets = BashOperator(
     task_id='grep',
@@ -47,28 +42,36 @@ filterTweets = BashOperator(
     dag=dag
 )
 
-cmdFilterUser = 'bash ' + bashOperators + 'cut.sh  ' + wdr + 'usecase1/temp/tweetsWithFord' + ' , 4 0 ' + wdr + 'usecase1/temp/usersWithFord'
+cmdFilterUser = "bash {} {} , 4 0 {}".\
+					format(os.path.join(bashOperators, 'cut.sh'), os.path.join(tempDir, 'tweetsWithFord' ), os.path.join(tempDir, 'usersWithFord'))
+
 filterUser = BashOperator(
     task_id='Cut',
     bash_command=cmdFilterUser,
     dag=dag
 )
 
-cmdSort_Unique_UIDs = 'bash ' + bashOperators + 'sort.sh  ' + wdr + 'usecase1/temp/usersWithFord' + ' , 1 n 1 ' + wdr + 'usecase1/temp/SortedusersWithFord'
+cmdSort_Unique_UIDs = "bash {} {} , 1 n 1 {}".\
+						format(os.path.join(bashOperators, 'sort.sh'), os.path.join(tempDir, 'usersWithFord' ), os.path.join(tempDir, 'SortedusersWithFord'))
+
 Sort_Unique_UIDs = BashOperator(
     task_id='Sort_Unique_UIDs',
     bash_command=cmdSort_Unique_UIDs,
     dag=dag
 )
 
-cmdSort_Original_Data = 'bash ' + bashOperators + 'sort.sh  ' + inputfile + ' , 4 n 0 ' + wdr + 'usecase1/temp/SortedData'
+cmdSort_Original_Data = "bash {} {} , 4 n 0 {}".\
+						format(os.path.join(bashOperators, 'sort.sh'), inputfile, os.path.join(tempDir, 'SortedData'))
+
 Sort_Original_Data = BashOperator(
     task_id='Sort_Original_Data',
     bash_command=cmdSort_Original_Data,
     dag=dag
 )
 
-cmdFilterTweetsOfUsers = 'bash ' + bashOperators + 'join.sh  ' + wdr + 'usecase1/temp/SortedData' + ' ' + wdr + 'usecase1/temp/SortedusersWithFord' + ' 4 1 , 0 n ' + tempDir + ' ' + wdr + 'usecase1/temp/tweetsOfUserWhoUsedFord'
+cmdFilterTweetsOfUsers = "bash {} {} {} 4 1 , 0 n {}".\
+						format(os.path.join(bashOperators, 'join.sh'), os.path.join(tempDir, 'SortedData'), os.path.join(tempDir, 'SortedusersWithFord'), os.path.join(tempDir, 'tweetsOfUserWhoUsedFord'))
+
 FilterTweetsWhoUsedFord = BashOperator(
     task_id='Join',
     bash_command=cmdFilterTweetsOfUsers,
